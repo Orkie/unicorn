@@ -422,6 +422,31 @@ static ObjectClass *arm_cpu_class_by_name(struct uc_struct *uc, const char *cpu_
 /* CPU models. These are not needed for the AArch64 linux-user build. */
 #if !defined(CONFIG_USER_ONLY) || !defined(TARGET_AARCH64)
 
+static void arm920_initfn(struct uc_struct *uc, Object *obj, void *opaque)
+{
+    ARMCPU *cpu = ARM_CPU(uc, obj);
+
+    cpu->dtb_compatible = "arm,arm920";
+    set_feature(&cpu->env, ARM_FEATURE_V4T);
+    set_feature(&cpu->env, ARM_FEATURE_DUMMY_C15_REGS);
+    cpu->midr = 0x41129200;
+    cpu->ctr = 0xd172172;
+    cpu->reset_sctlr = 0x00000078;    
+}
+
+static void arm940_initfn(struct uc_struct *uc, Object *obj, void *opaque)
+{
+    ARMCPU *cpu = ARM_CPU(uc, obj);
+
+    cpu->dtb_compatible = "arm,arm940";
+    set_feature(&cpu->env, ARM_FEATURE_V4T);
+    set_feature(&cpu->env, ARM_FEATURE_MPU);
+    set_feature(&cpu->env, ARM_FEATURE_DUMMY_C15_REGS);
+    cpu->midr = 0x41129400;
+    cpu->ctr = 0x7878879;
+    cpu->reset_sctlr = 0x00000078;
+}
+
 static void arm926_initfn(struct uc_struct *uc, Object *obj, void *opaque)
 {
     ARMCPU *cpu = ARM_CPU(uc, obj);
@@ -1004,7 +1029,9 @@ typedef struct ARMCPUInfo {
 
 static const ARMCPUInfo arm_cpus[] = {
 #if !defined(CONFIG_USER_ONLY) || !defined(TARGET_AARCH64)
+    { "arm920",      arm920_initfn },
     { "arm926",      arm926_initfn },
+    { "arm940",      arm940_initfn },
     { "arm946",      arm946_initfn },
     { "arm1026",     arm1026_initfn },
     /* What QEMU calls "arm1136-r2" is actually the 1136 r0p2, i.e. an

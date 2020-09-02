@@ -21,8 +21,12 @@ static int tosa_init(struct uc_struct *uc, MachineState *machine)
 {
     if (uc->mode & UC_MODE_MCLASS)
         uc->cpu = (CPUState *)cpu_arm_init(uc, "cortex-m3");
+    else if (uc->mode & UC_MODE_ARM920)
+        uc->cpu = (CPUState *)cpu_arm_init(uc, "arm920");
     else if (uc->mode & UC_MODE_ARM926)
         uc->cpu = (CPUState *)cpu_arm_init(uc, "arm926");
+    else if (uc->mode & UC_MODE_ARM940)
+        uc->cpu = (CPUState *)cpu_arm_init(uc, "arm940");    
     else if (uc->mode & UC_MODE_ARM946)
         uc->cpu = (CPUState *)cpu_arm_init(uc, "arm946");
     else if (uc->mode & UC_MODE_ARM1176)
