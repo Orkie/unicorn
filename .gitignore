@@ -99,3 +99,6 @@ build/
 [Oo]bj/
 packages/
 cmocka/
+
+
+buildlocal.sh
